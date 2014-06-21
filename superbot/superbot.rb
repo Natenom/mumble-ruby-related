@@ -135,6 +135,8 @@ class MumbleMPD
 									+ "#{cc}<b>v--</b> Decrease volume by 10%.<br />" \
 									+ "<br />" \
 									+ "<u>Channel control:</u><br />" \
+									+ "#{cc}<b>ch</b> Let the bot switch into your channel.<br />" \
+									+ "#{cc}<b>gohome</b> Let the bot switch to his default channel.<br />" \
 									+ "#{cc}<b>stick</b> Sticks the bot to your current channel.<br />" \
 									+ "#{cc}<b>unstick</b> unsticks the bot.<br />" \
 									+ "#{cc}<b>follow</b> Let the bot follow you.<br />" \
@@ -154,7 +156,6 @@ class MumbleMPD
 									+ "<u>Specials:</u><br />" \
 									+ "#{cc}<b>gotobed</b> Let the bot mute and deaf himself and pause the playlist.<br />" \
 									+ "#{cc}<b>wakeup</b> The opposite of gotobed.<br />" \
-									+ "#{cc}<b>ch</b> Let the bot switch into your channel.<br />" \
 									+ "#{cc}<b>song</b> Show the currently played song information.<br />If this information is empty, try #{cc}file instead.<br />" \
 									+ "#{cc}<b>file</b> Show the filename of the currently played song if #{cc}song does not contain useful information.<br />" \
 									+ "#{cc}<b>help</b> Shows this help.<br />")
@@ -169,7 +170,8 @@ class MumbleMPD
 								@cli.text_user(msg.actor, "Hey superbrain, I am already in your channel :)")
 							else
 								@cli.text_channel(@cli.current_channel, "Hey, \"#{@cli.users[msg.actor].name}\" asked me to make some music, going now. Bye :)")
-								@cli.join_channel(channeluserisin)							
+								@cli.join_channel(channeluserisin)
+								@mpd.pause = false
 							end
 						end
 						if message == 'debug'
@@ -209,6 +211,10 @@ class MumbleMPD
 							@mpd.pause = false
 							@cli.deafen false
 							@cli.mute false
+						end
+						if message == 'gohome'
+							@cli.join_channel(@mumbleserver_targetchannel)
+							@mpd.pause = true
 						end
 						if message == 'follow'
 								if @alreadyfollowing == true
