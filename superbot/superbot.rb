@@ -135,6 +135,8 @@ class MumbleMPD
 									+ "#{cc}<b>v--</b> Decrease volume by 10%.<br />" \
 									+ "<br />" \
 									+ "<u>Channel control:</u><br />" \
+									+ "#{cc}<b>ch</b> Let the bot switch into your channel.<br />" \
+									+ "#{cc}<b>gohome</b> Let the bot switch to his default channel.<br />" \
 									+ "#{cc}<b>stick</b> Sticks the bot to your current channel.<br />" \
 									+ "#{cc}<b>unstick</b> unsticks the bot.<br />" \
 									+ "#{cc}<b>follow</b> Let the bot follow you.<br />" \
@@ -154,7 +156,6 @@ class MumbleMPD
 									+ "<u>Specials:</u><br />" \
 									+ "#{cc}<b>gotobed</b> Let the bot mute and deaf himself and pause the playlist.<br />" \
 									+ "#{cc}<b>wakeup</b> The opposite of gotobed.<br />" \
-									+ "#{cc}<b>ch</b> Let the bot switch into your channel.<br />" \
 									+ "#{cc}<b>song</b> Show the currently played song information.<br />If this information is empty, try #{cc}file instead.<br />" \
 									+ "#{cc}<b>file</b> Show the filename of the currently played song if #{cc}song does not contain useful information.<br />" \
 									+ "#{cc}<b>help</b> Shows this help.<br />")
@@ -169,7 +170,8 @@ class MumbleMPD
 								@cli.text_user(msg.actor, "Hey superbrain, I am already in your channel :)")
 							else
 								@cli.text_channel(@cli.current_channel, "Hey, \"#{@cli.users[msg.actor].name}\" asked me to make some music, going now. Bye :)")
-								@cli.join_channel(channeluserisin)							
+								@cli.join_channel(channeluserisin)
+								@mpd.pause = false
 							end
 						end
 						if message == 'debug'
@@ -210,6 +212,10 @@ class MumbleMPD
 							@cli.deafen false
 							@cli.mute false
 						end
+						if message == 'gohome'
+							@cli.join_channel(@mumbleserver_targetchannel)
+							@mpd.pause = true
+						end
 						if message == 'follow'
 								if @alreadyfollowing == true
 									@cli.text_user(msg.actor, "#{@controlstring}I'm already following someone! Resetting...")
@@ -219,7 +225,7 @@ class MumbleMPD
 										@alreadyfollowing = false
 									rescue TypeError
 										puts "#{$!}"
-										@cli.text_user(msg.actor, "#{@controlstring}I'm already following someone! Resetting...")
+										@cli.text_user(msg.actor, "There was an error stopping the thread.")
 									end
 								end
 								@follow = true
@@ -236,7 +242,7 @@ class MumbleMPD
 						end
 						if message == 'unfollow'
 							if @follow == false
-								@cli.text_user(msg.actor, "#{@controlstring}unfollow hasn't been executed yet.")
+								@cli.text_user(msg.actor, "#{@controlstring}follow hasn't been executed yet.")
 							else
 								@follow = false
 								@alreadyfollowing = false
@@ -244,7 +250,7 @@ class MumbleMPD
 									Thread.kill(@following)
 								rescue TypeError
 									puts "#{$!}"
-									@cli.text_user(msg.actor, "#{@controlstring}unfollow hasn't been executed yet.")
+									@cli.text_user(msg.actor, "#{@controlstring}follow hasn't been executed yet.")
 								end
 							end
 						end
@@ -262,8 +268,7 @@ class MumbleMPD
 							end
 							@sticky = true
 							@alreadysticky = true
-							usermessagefrom = @cli.users[msg.actor]
-							channeluserisin = usermessagefrom["channel_id"]
+							channeluserisin = @cli.users[msg.actor].channel_id
 							@sticked = Thread.new {
 								while @sticky == true do
 									@cli.join_channel(channeluserisin)
