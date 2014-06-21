@@ -225,7 +225,7 @@ class MumbleMPD
 										@alreadyfollowing = false
 									rescue TypeError
 										puts "#{$!}"
-										@cli.text_user(msg.actor, "#{@controlstring}I'm already following someone! Resetting...")
+										@cli.text_user(msg.actor, "There was an error stopping the thread.")
 									end
 								end
 								@follow = true
@@ -242,7 +242,7 @@ class MumbleMPD
 						end
 						if message == 'unfollow'
 							if @follow == false
-								@cli.text_user(msg.actor, "#{@controlstring}unfollow hasn't been executed yet.")
+								@cli.text_user(msg.actor, "#{@controlstring}follow hasn't been executed yet.")
 							else
 								@follow = false
 								@alreadyfollowing = false
@@ -250,7 +250,7 @@ class MumbleMPD
 									Thread.kill(@following)
 								rescue TypeError
 									puts "#{$!}"
-									@cli.text_user(msg.actor, "#{@controlstring}unfollow hasn't been executed yet.")
+									@cli.text_user(msg.actor, "#{@controlstring}follow hasn't been executed yet.")
 								end
 							end
 						end
@@ -268,8 +268,7 @@ class MumbleMPD
 							end
 							@sticky = true
 							@alreadysticky = true
-							usermessagefrom = @cli.users[msg.actor]
-							channeluserisin = usermessagefrom["channel_id"]
+							channeluserisin = @cli.users[msg.actor].channel_id
 							@sticked = Thread.new {
 								while @sticky == true do
 									@cli.join_channel(channeluserisin)
