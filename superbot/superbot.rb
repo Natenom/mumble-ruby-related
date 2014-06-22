@@ -13,7 +13,6 @@ class MumbleMPD
 		@mumbleserver_userpassword = ARGV[3].to_s
 		@mumbleserver_targetchannel = ARGV[4].to_s
 		@quality_bitrate = ARGV[5].to_i
-		
 		@mpd_fifopath = ARGV[6].to_s
 		@mpd_host = ARGV[7].to_s
 		@mpd_port = ARGV[8].to_i
@@ -77,10 +76,19 @@ class MumbleMPD
 			end
 			@cli.text_channel(@cli.current_channel, "Repeat mode is now: #{repeat}.")
 		end
-		
 		@mpd.on :song do |current|
 			if not current.nil? #Would crash if playlist was empty.
-				@cli.text_channel(@cli.current_channel, "#{current.artist} - #{current.title} (#{current.album})")
+				if @output_comment == true
+					begin
+						@cli.set_comment("<b>Artist:&nbsp;&nbsp;&nbsp;&nbsp;</b>#{current.artist}<br />"\
+										+ "<b>Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>#{current.title}<br /><br />" \
+										+ "<b>Type #{@controlstring}help to view my commands!")
+					rescue NoMethodError
+						puts "#{$!}"
+					end
+				else
+					@cli.text_channel(@cli.current_channel, "<br>#{current.artist} - #{current.title} (#{current.album})")
+				end
 			end
 		end
 	end
@@ -97,6 +105,14 @@ class MumbleMPD
 		@controlstring = "#"
 		#whitelist = [83,48,110,90]
 		
+		@output_comment = false
+		begin
+			@cli.set_comment("<b>Artist:&nbsp;&nbsp;&nbsp;&nbsp;</b>DISABLED<br />"\
+									+ "<b>Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>DISABLED<br /><br />" \
+									+ "<b>Type #{@controlstring}help to view my commands!" )
+		rescue NoMethodError
+			puts "#{$!}"
+		end
 		@cli.on_text_message do |msg|
 			if @controllable == "true"
 				if msg.message.start_with?("#{@controlstring}")
@@ -135,14 +151,13 @@ class MumbleMPD
 									+ "#{cc}<b>v--</b> Decrease volume by 10%.<br />" \
 									+ "<br />" \
 									+ "<u>Channel control:</u><br />" \
-									+ "#{cc}<b>ch</b> Let the bot switch into your channel.<br />" \
-									+ "#{cc}<b>gohome</b> Let the bot switch to his default channel.<br />" \
 									+ "#{cc}<b>stick</b> Sticks the bot to your current channel.<br />" \
 									+ "#{cc}<b>unstick</b> unsticks the bot.<br />" \
 									+ "#{cc}<b>follow</b> Let the bot follow you.<br />" \
 									+ "#{cc}<b>unfollow</b> The bot stops following you.<br />" \
 									+ "<br />" \
 									+ "<u>Settings:</u><br />" \
+									+ "#{cc}<b>output</b> Toggle the output mode ( Comment or Chat )" \
 									+ "#{cc}<b>consume</b> Toggle mpd´s consume mode which removes played titles from the playlist if on.<br />" \
 									+ "#{cc}<b>repeat</b> Toogle mpd´s repeat mode.<br />" \
 									+ "#{cc}<b>random</b> Toogle mpd´s random mode.<br />" \
@@ -156,6 +171,7 @@ class MumbleMPD
 									+ "<u>Specials:</u><br />" \
 									+ "#{cc}<b>gotobed</b> Let the bot mute and deaf himself and pause the playlist.<br />" \
 									+ "#{cc}<b>wakeup</b> The opposite of gotobed.<br />" \
+									+ "#{cc}<b>ch</b> Let the bot switch into your channel.<br />" \
 									+ "#{cc}<b>song</b> Show the currently played song information.<br />If this information is empty, try #{cc}file instead.<br />" \
 									+ "#{cc}<b>file</b> Show the filename of the currently played song if #{cc}song does not contain useful information.<br />" \
 									+ "#{cc}<b>help</b> Shows this help.<br />")
@@ -171,7 +187,6 @@ class MumbleMPD
 							else
 								@cli.text_channel(@cli.current_channel, "Hey, \"#{@cli.users[msg.actor].name}\" asked me to make some music, going now. Bye :)")
 								@cli.join_channel(channeluserisin)
-								@mpd.pause = false
 							end
 						end
 						if message == 'debug'
@@ -211,10 +226,6 @@ class MumbleMPD
 							@mpd.pause = false
 							@cli.deafen false
 							@cli.mute false
-						end
-						if message == 'gohome'
-							@cli.join_channel(@mumbleserver_targetchannel)
-							@mpd.pause = true
 						end
 						if message == 'follow'
 								if @alreadyfollowing == true
@@ -288,6 +299,19 @@ class MumbleMPD
 									puts "#{$!}"
 									@cli.text_user(msg.actor, "#{@controlstring}unstick hasn't been executed yet.")
 								end
+							end
+						end
+						if message == 'output'
+							begin
+								if @output_comment == true
+									@output_comment = false
+									@cli.text_user(msg.actor, "Output is now CHAT")
+								else
+									@output_comment = true
+									@cli.text_user(msg.actor, "Output is now COMMENT")
+								end
+							rescue NoMethodError
+								puts "#{$!}"
 							end
 						end
 						if message.match(/^v [0-9]{1,3}$/)
