@@ -745,28 +745,27 @@ class MumbleMPD
 					status = @mpd.status
 					#@cli.text_user(msg.actor, "Sorry, this is still the raw message I get from mpd...:<br />#{status.inspect}")
 					
-					message = 
-							+ "<br />" \
-							+ "<u>Current song</u>:" \
+					message = "<br />" \
+							+ "<u>Current song</u>:<br />" \
 							+ "Song ID: #{status[:songid]}<br />" \
 							+ "Time of song (now/total): #{status[:time].inspect}<br />" \
 							+ "Time song (elapsed): #{status[:elapsed].inspect}<br />" \
 							+ "Bitrate: #{status[:bitrate]}<br />" \
 							+ "Audio bla: #{status[:audio].inspect}<br />" \
 							+ "<br />" \
-							+ "<u>Next song</u>:" \
+							+ "<u>Next song</u>:<br />" \
 							+ "Number of next song in playlist: #{status[:nextsong]}<br />" \
 							+ "ID of next song in playlist: #{status[:nextsongid]}<br />" \
 							+ "<br />" \
-							+ "<u>State</u>:" \
+							+ "<u>State</u>:<br />" \
 							+ "State: #{status[:state]}<br />" \
 							+ "<br />" \
-							+ "<u>Playlist</u>:" \
+							+ "<u>Playlist</u>:<br />" \
 							+ "ID of current playlist: #{status[:playlist]}<br />" \
 							+ "Entries in playlist: #{status[:playlistlength]}<br />" \
 							+ "Entry number: #{status[:song]}<br />" \
 							+ "<br />" \
-							+ "<u>Settings</u>:" \
+							+ "<u>Settings</u>:<br />" \
 							+ "Volume: #{status[:volume]}<br />" \
 							+ "X-Fade: #{status[:xfade]}<br />" \
 							+ "mixrampdb: #{status[:mixrampdb]}<br />" \
