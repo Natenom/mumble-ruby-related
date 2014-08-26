@@ -743,7 +743,29 @@ class MumbleMPD
 				
 				if message == 'status'
 					status = @mpd.status
-					@cli.text_user(msg.actor, "Sorry, this is still the raw message I get from mpd...:<br />#{status.inspect}")
+					#@cli.text_user(msg.actor, "Sorry, this is still the raw message I get from mpd...:<br />#{status.inspect}")
+					
+					message = "<br />Volume: #{status[:volume]}<br />" \
+							+ "Repeat: #{status[:repeat]}<br />" \
+							+ "Random: #{status[:random]}<br />" \
+							+ "Single: #{status[:single]}<br />" \
+							+ "Consume: #{status[:consume]}<br />" \
+							+ "Playlist ID: #{status[:playlist]}<br />" \
+							+ "Entries in playlist: #{status[:playlistlength]}<br />" \
+							+ "X-Fade: #{status[:xfade]}<br />" \
+							+ "mixrampdb: #{status[:mixrampdb]}<br />" \
+							+ "mixrampdelay: #{status[:mixrampdelay]}<br />" \
+							+ "State: #{status[:state]}<br />" \
+							+ "Entry number: #{status[:song]}<br />" \
+							+ "Song ID: #{status[:songid]}<br />" \
+							+ "Time of song (now/total): #{status[:time].inspect}<br />" \
+							+ "Time song (elapsed): #{status[:elapsed].inspect}<br />" \
+							+ "Bitrate: #{status[:bitrate]}<br />" \
+							+ "Audio bla: #{status[:audio].inspect}<br />" \
+							+ "Number of next song in playlist: #{status[:nextsong]}<br />" \
+							+ "ID of next song in playlist: #{status[:nextsongid]}<br />"
+							
+					@cli.text_user(msg.actor, message)
 				end
 				
 				if message.match(/[fF][uU][cC][kK]/)
