@@ -76,6 +76,21 @@ class MumbleMPD
 		
 		@history.push("%s - %s: %s" % [timestring, username, command])
 	end
+	
+	def getsongtime
+		status = @mpd.status
+
+		#Code from http://stackoverflow.com/questions/19595840/rails-get-the-time-difference-in-hours-minutes-and-seconds
+		now_mm, now_ss = status[:time][0].divmod(60) #Minutes and seconds of current time within the song.
+		now_hh, now_mm = now_mm.divmod(60)
+		total_mm, total_ss = status[:time][1].divmod(60) #Minutes and seconds of total time of the song.
+		total_hh, total_mm = total_mm.divmod(60)
+		
+		now = "%02d:%02d:%02d" % [now_hh, now_mm, now_ss]
+		total = "%02d:%02d:%02d" % [total_hh, total_mm, total_ss]
+		
+		return now, total
+	end
 		
 	def start
 		@cli.connect
@@ -392,16 +407,8 @@ class MumbleMPD
 				if message.match(/^seek [+-]?[0-9]{1,3}$/)
 					seekto = message.match(/^seek ([+-]?[0-9]{1,3})$/)[1]
 					@mpd.seek seekto
-					status = @mpd.status
-
-					#Code from http://stackoverflow.com/questions/19595840/rails-get-the-time-difference-in-hours-minutes-and-seconds
-					now_mm, now_ss = status[:time][0].divmod(60) #Minutes and seconds of current time within the song.
-					now_hh, now_mm = now_mm.divmod(60)
-					total_mm, total_ss = status[:time][1].divmod(60) #Minutes and seconds of total time of the song.
-					total_hh, total_mm = total_mm.divmod(60)
-					
-					now = "%02d:%02d:%02d" % [now_hh, now_mm, now_ss]
-					total = "%02d:%02d:%02d" % [total_hh, total_mm, total_ss]
+										
+					now, total = getsongtime
 					
 					@cli.text_channel(@cli.me.current_channel, "Seeked to position #{now}/#{total}.")
 				end
@@ -745,13 +752,15 @@ class MumbleMPD
 				
 				if message == 'file'
 					current = @mpd.current_song
-					@cli.text_user(msg.actor, "Filename of currently played song:<br />#{current.file}</span>")
+					now, total = getsongtime
+					@cli.text_user(msg.actor, "Filename of currently played song:<br />#{current.file}</span> - Pos: #{now}/#{total}")
 				end
 				
 				if message == 'song'
 					current = @mpd.current_song
 					if not current.nil? #Would crash if playlist was empty.
-						@cli.text_user(msg.actor, "#{current.artist} - #{current.title} (#{current.album})")
+						now, total = getsongtime
+						@cli.text_user(msg.actor, "#{current.artist} - #{current.title} (#{current.album}) - Pos: #{now}/#{total}")
 					else
 						@cli.text_user(msg.actor, "No song is played currently.")
 					end
