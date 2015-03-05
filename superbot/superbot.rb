@@ -757,6 +757,47 @@ class MumbleMPD
 					end
 				end
 				
+				#if message[0, 3] == 'add'
+				#	args = message.split(' ')[1]
+				#	if args != '' then
+				#		filter_songs = @mpd.where({artist: args}, {add: true})
+				#		if filter_songs.length < 1 then
+				#			filter_songs = @mpd.where({album: args}, {add: true})
+				#			if filter_songs.length < 1 then
+				#				filter_songs = @mpd.where({title: args}, {add: true})
+				#				if filter_songs.length < 1 then
+				#					@cli.text_user(msg.actor, "This artist/album/song was not found.")
+				#				end
+				#			end
+				#		else
+				#			for song in filter_songs
+				#				@cli.text_user(msg.actor, "#{song.artist} - #{song.title} (#{song.album}) added.")
+				#			end
+				#		end
+				#	end
+				#end
+				
+				if message[0, 3] == 'add'
+					split = message.split(' ')
+					args = split[1, split.length-1].join(" ")
+					if args != '' then
+						for artist in @mpd.artists
+							if(artist == args)
+								@mpd.add(args)
+							end
+						end
+					end
+				end
+				
+				if message[0, 5] == 'radio'
+					args = message.split(' ')[1]
+					if args != '' then
+						system("mpc -p #{@mpd_port} clear")
+						system("mpc -p #{@mpd_port} add "+args)
+						@mpd.play
+					end
+				end
+				
 				addtohistory(message, @cli.users[msg.actor].name)
 			end
 		end
