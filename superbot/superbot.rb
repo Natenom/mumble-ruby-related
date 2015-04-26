@@ -18,7 +18,7 @@ class MumbleMPD
 		@use_vbr = 1 
 		@stop_on_unregistered_users = true
 		@use_comment_for_status_display = false
-		@fade_out_while_speak = true
+		@fade_out_while_speak = false
 		@template_if_comment_enabled = "<b>Artist: </b>%s<br />"\
 							+ "<b>Title: </b>%s<br />" \
 							+ "<b>Album: </b>%s<br /><br />" \
