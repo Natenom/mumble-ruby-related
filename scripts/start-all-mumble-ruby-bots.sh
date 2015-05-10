@@ -15,13 +15,13 @@ cd /home/botmaster/user_certificates
 ### Start Mumble-Ruby-Bots - MPD instances must already be running. ###
 
 # Bot 1
-tmux new-session -d -n bot1 'ruby /home/botmaster/scripts/mumble-ruby-mpd-bot.rb mumble.natenom.name 64738 Bot1_Test "" "Sitzecke" 72000 /home/botmaster/mpd1/mpd.fifo localhost 7701'
+tmux new-session -d -n bot1 'ruby /home/botmaster/scripts/mumble-ruby-mpd-bot.rb mumble.natenom.com 64738 Bot1_Test "" "Sitzecke" 72000 /home/botmaster/mpd1/mpd.fifo localhost 7701'
 
 # Bot 2
-#tmux new-session -d -n bot2 'ruby /home/botmaster/scripts/mumble-ruby-mpd-bot.rb mumble.natenom.name 64738 Bot2_Test "" "Sitzecke" 72000 /home/botmaster/mpd2/mpd.fifo localhost 7702'
+#tmux new-session -d -n bot2 'ruby /home/botmaster/scripts/mumble-ruby-mpd-bot.rb mumble.natenom.com 64738 Bot2_Test "" "Sitzecke" 72000 /home/botmaster/mpd2/mpd.fifo localhost 7702'
 
 # Bot 3
-#tmux new-session -d -n bot3 'ruby /home/botmaster/scripts/mumble-ruby-mpd-bot.rb mumble.natenom.name 64738 Bot3_Test "" "Sitzecke" 72000 /home/botmaster/mpd3/mpd.fifo localhost 7703'
+#tmux new-session -d -n bot3 'ruby /home/botmaster/scripts/mumble-ruby-mpd-bot.rb mumble.natenom.com 64738 Bot3_Test "" "Sitzecke" 72000 /home/botmaster/mpd3/mpd.fifo localhost 7703'
 
 
 ### Optional: Clear playlist, add music and play it; three lines for every bot ###
