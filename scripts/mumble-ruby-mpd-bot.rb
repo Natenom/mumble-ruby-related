@@ -7,7 +7,7 @@
 
 require "mumble-ruby"
 require 'rubygems'
-require 'librmpd'
+require 'ruby-mpd'
 require 'thread'
 
 class MumbleMPD
