@@ -28,7 +28,7 @@ cd /home/botmaster/mumble-ruby-pluginbot
 
 ### Start Mumble-Ruby-Bots - MPD instances must already be running. ###
 # Bot 1
-tmux new-session -d -n bot1 'ruby /home/botmaster/src/umble-ruby-pluginbot/pluginbot.rb'
+tmux new-session -d -n bot1 'ruby /home/botmaster/src/mumble-ruby-pluginbot/pluginbot.rb'
 
 # Bot 2
 #tmux new-session -d -n bot2 'ruby /home/botmaster/src/mumble-ruby-pluginbot/pluginbot.rb'
