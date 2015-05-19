@@ -23,7 +23,7 @@ rvm use @bots
 
 
 ### Start from here to create cert dirs within this directory. ###
-cd /home/botmaster/mumble-ruby-pluginbot 
+cd /home/botmaster/src/mumble-ruby-pluginbot 
 
 
 ### Start Mumble-Ruby-Bots - MPD instances must already be running. ###
