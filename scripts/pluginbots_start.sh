@@ -40,7 +40,6 @@ tmux new-session -d -n bot1 'ruby /home/botmaster/src/mumble-ruby-pluginbot/plug
 ### Optional: Clear playlist, add music and play it; three lines for every bot ###
 # Bot 1
 # Comment out the next tree lines if you don't want to always listen to the radio.
-mpc -p 7701 clear
 mpc -p 7701 add http://ogg.theradio.cc/
 mpc -p 7701 play
 
