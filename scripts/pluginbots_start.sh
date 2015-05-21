@@ -28,13 +28,13 @@ cd /home/botmaster/src/mumble-ruby-pluginbot
 
 ### Start Mumble-Ruby-Bots - MPD instances must already be running. ###
 # Bot 1
-tmux new-session -d -n bot1 'ruby /home/botmaster/src/mumble-ruby-pluginbot/pluginbot.rb'
+tmux new-session -d -n bot1 'ruby /home/botmaster/src/mumble-ruby-pluginbot/pluginbot.rb --config=/home/botmaster/src/bot1_conf.rb'
 
 # Bot 2
-#tmux new-session -d -n bot2 'ruby /home/botmaster/src/mumble-ruby-pluginbot/pluginbot.rb'
+#tmux new-session -d -n bot2 'ruby /home/botmaster/src/mumble-ruby-pluginbot/pluginbot.rb --config=/home/botmaster/src/bot2_conf.rb'
 
 # Bot 3
-#tmux new-session -d -n bot3 'ruby /home/botmaster/src/mumble-ruby-pluginbot/pluginbot.rb'
+#tmux new-session -d -n bot3 'ruby /home/botmaster/src/mumble-ruby-pluginbot/pluginbot.rb --config=/home/botmaster/src/bot3_conf.rb'
 
 
 ### Optional: Clear playlist, add music and play it; three lines for every bot ###
