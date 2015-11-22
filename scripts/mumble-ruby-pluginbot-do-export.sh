@@ -9,7 +9,7 @@ mpc -p 7701 clear
 rm ~/src/.first*
 
 sudo apt-get update
-sudo apt-get upgrade
+sudo apt-get dist-upgrade
 sudo apt-get clean
 
 ~/src/mumble-ruby-pluginbot/scripts/updater.sh
