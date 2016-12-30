@@ -5,8 +5,11 @@
 
 set -x
 
+rm /home/botmaster/logs/*.log
+rm -rf /home/botmaster/music /home/botmaster/temp
+mkdir /home/botmaster/music /home/botmaster/temp
+
 mpc -p 7701 clear
-rm ~/src/.first*
 
 sudo apt-get update
 sudo apt-get dist-upgrade
